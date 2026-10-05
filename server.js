@@ -13,16 +13,17 @@ const ai = new GoogleGenAI({
 // Permet à Express de comprendre le JSON reçu.
 app.use(express.json());
 
-// Route permettant de vérifier que le serveur fonctionne.
-app.get("/", (req, res) => {
-  res.send("Serveur Gemini Chatbot opérationnel !");
-});
+// Permet à Express de servir les fichiers du dossier public.
+// Quand on visite http://localhost:3000,
+// Express affiche automatiquement public/index.html.
+app.use(express.static("public"));
 
 // Route utilisée pour envoyer un message à Gemini.
 app.post("/api/chat", async (req, res) => {
   try {
     const message = req.body.message;
 
+    // Vérifie qu'un message a bien été envoyé.
     if (!message) {
       return res.status(400).json({
         error: "Le message est obligatoire.",
@@ -31,11 +32,13 @@ app.post("/api/chat", async (req, res) => {
 
     console.log("Message reçu :", message);
 
+    // Envoi du message à Gemini.
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
       contents: message,
     });
 
+    // Renvoie la réponse de Gemini au navigateur.
     res.json({
       reply: response.text,
     });
@@ -51,4 +54,4 @@ app.post("/api/chat", async (req, res) => {
 // Démarrage du serveur.
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur http://localhost:${PORT}`);
-}); 
+});
