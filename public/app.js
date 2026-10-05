@@ -3,6 +3,10 @@ const input = document.getElementById("message-input");
 const messages = document.getElementById("messages");
 const submitButton = form.querySelector("button");
 
+// Historique de la conversation.
+// Pour l'instant, il reste en mémoire tant que la page est ouverte.
+const history = [];
+
 function addMessage(text, sender) {
   const messageElement = document.createElement("div");
 
@@ -34,8 +38,12 @@ form.addEventListener("submit", async (event) => {
       headers: {
         "Content-Type": "application/json",
       },
+
+      // On envoie maintenant le nouveau message
+      // ET les messages précédents.
       body: JSON.stringify({
         message: message,
+        history: history,
       }),
     });
 
@@ -48,6 +56,18 @@ form.addEventListener("submit", async (event) => {
     }
 
     addMessage(data.reply, "bot");
+
+    // Une fois que Gemini a répondu,
+    // on ajoute cet échange à l'historique.
+    history.push({
+      role: "user",
+      text: message,
+    });
+
+    history.push({
+      role: "assistant",
+      text: data.reply,
+    });
   } catch (error) {
     console.error("Erreur :", error);
 

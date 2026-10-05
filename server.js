@@ -4,26 +4,52 @@ import { GoogleGenAI } from "@google/genai";
 const app = express();
 const PORT = 3000;
 
-// Création du client Gemini.
-// La clé reste dans le fichier .env et n'est jamais envoyée au navigateur.
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-// Permet à Express de comprendre le JSON reçu.
 app.use(express.json());
-
-// Permet à Express de servir les fichiers du dossier public.
-// Quand on visite http://localhost:3000,
-// Express affiche automatiquement public/index.html.
 app.use(express.static("public"));
 
-// Route utilisée pour envoyer un message à Gemini.
+// Petite pause utilisée entre deux tentatives.
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Appelle Gemini et réessaie automatiquement en cas de 503.
+async function generateWithRetry(contents, maxAttempts = 3) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents: contents,
+        config: {
+          maxOutputTokens: 300,
+        },
+      });
+    } catch (error) {
+      const status = error.status;
+
+      console.error(
+        `Tentative Gemini ${attempt}/${maxAttempts} :`,
+        status || error.message
+      );
+
+      // On ne réessaie que pour une surcharge temporaire.
+      if (status !== 503 || attempt === maxAttempts) {
+        throw error;
+      }
+
+      // 1 seconde, puis 2 secondes.
+      await wait(attempt * 1000);
+    }
+  }
+}
+
 app.post("/api/chat", async (req, res) => {
   try {
-    const message = req.body.message;
+    const { message, history = [] } = req.body;
 
-    // Vérifie qu'un message a bien été envoyé.
     if (!message) {
       return res.status(400).json({
         error: "Le message est obligatoire.",
@@ -32,13 +58,28 @@ app.post("/api/chat", async (req, res) => {
 
     console.log("Message reçu :", message);
 
-    // Envoi du message à Gemini.
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: message,
+    // Conversion de notre historique au format Gemini.
+    const contents = history.map((item) => ({
+      role: item.role === "assistant" ? "model" : "user",
+      parts: [
+        {
+          text: item.text,
+        },
+      ],
+    }));
+
+    // Ajout du nouveau message.
+    contents.push({
+      role: "user",
+      parts: [
+        {
+          text: message,
+        },
+      ],
     });
 
-    // Renvoie la réponse de Gemini au navigateur.
+    const response = await generateWithRetry(contents);
+
     res.json({
       reply: response.text,
     });
@@ -51,7 +92,6 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Démarrage du serveur.
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
