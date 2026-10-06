@@ -67,10 +67,77 @@ h1 {
 
 .chat-form {
   display: flex;
+  align-items: center;
   gap: 10px;
 }
 
-.chat-form input {
+.tools-wrapper {
+  position: relative;
+}
+
+.tools-button {
+  width: 44px;
+  height: 44px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #eeeeee;
+  color: #222;
+
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.tools-button:hover {
+  background: #dddddd;
+}
+
+.tools-menu {
+  display: none;
+
+  position: absolute;
+  left: 0;
+  bottom: 55px;
+
+  width: 280px;
+  padding: 8px;
+
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+
+  z-index: 10;
+}
+
+.tools-menu.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.tools-menu button {
+  width: 100%;
+  padding: 12px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #222;
+
+  text-align: left;
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+.tools-menu button:hover {
+  background: #f1f1f1;
+}
+
+#message-input {
   flex: 1;
 
   padding: 12px;
@@ -81,7 +148,7 @@ h1 {
   font-size: 16px;
 }
 
-.chat-form button {
+.chat-form > button[type="submit"] {
   padding: 12px 20px;
 
   border: none;
@@ -94,12 +161,12 @@ h1 {
   cursor: pointer;
 }
 
-.chat-form button:hover {
+.chat-form > button[type="submit"]:hover {
   background: #1d4ed8;
 }
 
-.chat-form input:disabled,
-.chat-form button:disabled {
+#message-input:disabled,
+.chat-form > button[type="submit"]:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

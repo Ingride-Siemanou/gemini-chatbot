@@ -1,10 +1,13 @@
 const form = document.getElementById("chat-form");
 const input = document.getElementById("message-input");
 const messages = document.getElementById("messages");
-const submitButton = form.querySelector("button");
+const submitButton = form.querySelector('button[type="submit"]');
 
-// Historique de la conversation.
-// Pour l'instant, il reste en mémoire tant que la page est ouverte.
+const toolsButton = document.getElementById("tools-button");
+const toolsMenu = document.getElementById("tools-menu");
+const fileButton = document.getElementById("file-button");
+const fileInput = document.getElementById("file-input");
+
 const history = [];
 
 function addMessage(text, sender) {
@@ -16,6 +19,31 @@ function addMessage(text, sender) {
   messages.appendChild(messageElement);
   messages.scrollTop = messages.scrollHeight;
 }
+
+toolsButton.addEventListener("click", () => {
+  toolsMenu.classList.toggle("open");
+});
+
+fileButton.addEventListener("click", () => {
+  fileInput.click();
+  toolsMenu.classList.remove("open");
+});
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  addMessage(`Fichier sélectionné : ${file.name}`, "user");
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".tools-wrapper")) {
+    toolsMenu.classList.remove("open");
+  }
+});
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -38,9 +66,6 @@ form.addEventListener("submit", async (event) => {
       headers: {
         "Content-Type": "application/json",
       },
-
-      // On envoie maintenant le nouveau message
-      // ET les messages précédents.
       body: JSON.stringify({
         message: message,
         history: history,
@@ -57,8 +82,6 @@ form.addEventListener("submit", async (event) => {
 
     addMessage(data.reply, "bot");
 
-    // Une fois que Gemini a répondu,
-    // on ajoute cet échange à l'historique.
     history.push({
       role: "user",
       text: message,
