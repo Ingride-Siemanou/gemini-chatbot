@@ -1,0 +1,41 @@
+Une API permet à différentes applications de communiquer entre elles et d'échanger des données.
+
+Une API REST permet généralement à un client et à un serveur de communiquer grâce au protocole HTTP.
+
+Les principales méthodes HTTP sont GET pour récupérer des données, POST pour envoyer ou créer des données, PUT ou PATCH pour modifier des données et DELETE pour supprimer des données.
+
+Une clé API permet d'identifier ou d'authentifier une application lorsqu'elle utilise un service externe. Une clé API privée ne doit pas être exposée publiquement.
+
+JSON est un format couramment utilisé pour échanger des données entre un client et un serveur.
+
+Node.js permet d'exécuter du JavaScript en dehors du navigateur, notamment pour créer des applications côté serveur.
+
+Express est un framework basé sur Node.js qui facilite la création de serveurs web et d'API.
+
+Une intelligence artificielle générative est capable de produire du contenu, comme du texte, à partir des instructions fournies par un utilisateur.
+
+Un chatbot est un programme permettant à un utilisateur de communiquer avec un système informatique sous forme de conversation.
+
+Le contexte conversationnel permet à un chatbot de prendre en compte les messages précédents pour produire des réponses plus cohérentes.
+
+Le RAG signifie Retrieval-Augmented Generation. Il permet d'améliorer les réponses d'une intelligence artificielle en recherchant d'abord des informations dans une base de connaissances.
+
+Dans un système RAG, les documents peuvent être découpés en petits passages appelés chunks afin de faciliter la recherche d'informations pertinentes.
+
+Un embedding est une représentation numérique d'un texte sous forme de vecteur. Il permet de comparer le sens de différents textes.
+
+Deux phrases peuvent avoir des embeddings proches lorsqu'elles ont un sens similaire, même si elles n'utilisent pas exactement les mêmes mots.
+
+La similarité cosinus permet de mesurer la proximité entre deux vecteurs. Elle peut être utilisée pour trouver les passages les plus proches d'une question.
+
+Lorsqu'une question est posée à un système RAG, la question est transformée en embedding puis comparée aux embeddings des documents.
+
+Les passages les plus pertinents sont récupérés et transmis au modèle d'intelligence artificielle avec la question de l'utilisateur.
+
+Le RAG permet notamment d'utiliser des connaissances spécifiques sans avoir besoin de réentraîner complètement le modèle d'intelligence artificielle.
+
+Git est un système de gestion de versions permettant de conserver l'historique des modifications d'un projet informatique.
+
+Une branche Git permet de développer une fonctionnalité séparément sans modifier directement la version principale d'un projet.
+
+Un commit permet d'enregistrer un ensemble de modifications dans l'historique Git.

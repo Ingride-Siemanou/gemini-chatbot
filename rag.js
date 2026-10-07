@@ -6,7 +6,7 @@ const ai = new GoogleGenAI({
 });
 
 export function loadKnowledge() {
-  return fs.readFileSync("./data/knowledge.txt", "utf-8");
+  return fs.readFileSync("./data/text.txt", "utf-8");
 }
 
 export function splitIntoChunks(text) {
