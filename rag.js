@@ -4,6 +4,7 @@ import fs from "fs";
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
+
 export function loadKnowledge() {
   return fs.readFileSync("./data/knowledge.txt", "utf-8");
 }
