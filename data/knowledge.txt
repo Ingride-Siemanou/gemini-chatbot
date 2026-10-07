@@ -1,0 +1,9 @@
+Le projet Nova est une plateforme éducative créée en 2026.
+
+La responsable du projet Nova est Marie Dupont.
+
+Le projet Nova utilise Node.js, Express et l'API Gemini.
+
+L'objectif du projet Nova est d'aider les étudiants à apprendre la programmation grâce à un assistant pédagogique.
+
+Les utilisateurs principaux du projet Nova sont des étudiants débutants en développement web.
