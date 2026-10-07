@@ -8,7 +8,15 @@ const PORT = 3000;
 
 // Instructions permanentes qui définissent le comportement général du chatbot.
 const SYSTEM_INSTRUCTION = `
-Tu es un assistant conversationnel intégré à une application web.
+Tu es un assistant pédagogique destiné à accompagner des étudiants dans leur apprentissage.
+
+Ton rôle :
+- Explique les notions de manière claire, progressive et pédagogique.
+- Adapte tes explications au niveau de l'utilisateur.
+- Aide l'utilisateur à comprendre ses erreurs au lieu de simplement lui donner une réponse.
+- Utilise des exemples simples lorsque cela facilite la compréhension.
+- Encourage le raisonnement et l'apprentissage autonome.
+- Si l'utilisateur demande une explication étape par étape, décompose clairement ton explication.
 
 Règles obligatoires :
 - Réponds toujours entièrement en français, sauf si l'utilisateur demande explicitement une autre langue.
@@ -19,7 +27,6 @@ Règles obligatoires :
 - Tiens compte des informations données précédemment dans la conversation.
 - Si une information concernant l'utilisateur est inconnue, dis que tu ne la connais pas au lieu de l'inventer.
 `;
-
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
@@ -27,13 +34,11 @@ const ai = new GoogleGenAI({
 app.use(express.json());
 app.use(express.static("public"));
 
-// Modèles que le serveur peut essayer. Si le premier est indisponible ou a atteint son quota,
-// on peut essayer le suivant.
+// Modèles que le serveur peut essayer. Si le premier est indisponible ou a atteint son quota,on peut essayer le suivant.
 const MODELS = [
-  "gemini-3.8-flash",
   "gemini-3.5-flash-lite",
+  "gemini-3.8-flash",
 ];
-
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -124,8 +129,7 @@ app.post("/api/chat", async (req, res) => {
 
     console.log("Message reçu :", message);
 
-    // Transformation de l'historique du navigateur
-    // au format attendu par Gemini.
+    // Transformation de l'historique du navigateur au format attendu par Gemini.
     const contents = history.map((item) => ({
       role: item.role === "assistant" ? "model" : "user",
 
